@@ -7,13 +7,20 @@
 
     function load() {
       try {
-        const raw = localStorage.getItem(STORAGE_KEY);
-        if (raw) entries = JSON.parse(raw);
-      } catch(e) { entries = []; }
+        const data = localStorage.getItem(STORAGE_KEY);
+        entries = data ? JSON.parse(data) : [];
+      } catch (e) {
+        console.error('Failed to load data:', e);
+        entries = [];
+      }
     }
 
     function save() {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(entries));
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(entries));
+      } catch (e) {
+        console.error('Failed to save data:', e);
+      }
     }
 
     function toMin(t) {
@@ -41,19 +48,20 @@
       return DAYS[dt.getDay()] + ' ' + dt.getDate() + '.' + String(dt.getMonth()+1).padStart(2,'0') + '.' + dt.getFullYear();
     }
 
-    function addEntry() {
+    async function addEntry() {
       const date = document.getElementById('inp-date').value;
       const start = document.getElementById('inp-start').value;
       const end = document.getElementById('inp-end').value;
       const brk = parseInt(document.getElementById('inp-break').value) || 0;
+      const paid = document.getElementById('inp-paid-break').checked;
 
       if (!date || !start || !end) { alert('Fyll inn dato, start og slutt.'); return; }
       if (entries.find(e => e.date === date)) { alert('Denne datoen er allerede registrert.'); return; }
 
-      const worked = toMin(end) - toMin(start) - brk;
+      const worked = toMin(end) - toMin(start) - (paid ? 0 : brk);
       if (worked <= 0) { alert('Sluttid må være etter starttid minus pause.'); return; }
 
-      entries.push({ date, start, end, brk, worked });
+      entries.push({ date, start, end, brk, paid, worked });
       entries.sort((a, b) => a.date.localeCompare(b.date));
       save();
       render();
@@ -64,7 +72,7 @@
       document.getElementById('inp-date').value = dt.toISOString().slice(0,10);
     }
 
-    function removeEntry(i) {
+    async function removeEntry(i) {
       if (!confirm('Slett denne dagen?')) return;
       entries.splice(i, 1);
       save();
@@ -101,7 +109,7 @@
           <td>${fmtDate(e.date)}</td>
           <td>${e.start}</td>
           <td>${e.end}</td>
-          <td>${e.brk} min</td>
+          <td>${e.brk} min${e.paid ? ' (betalt)' : ''}</td>
           <td>${fmtWorked(e.worked)}</td>
           <td><span class="badge ${cls}">${fmtFlex(flex)}</span></td>
           <td><button class="btn-del" onclick="removeEntry(${i})">✕</button></td>
@@ -137,10 +145,12 @@
       }
     }
 
-    // Set default date to today
-    const today = new Date();
-    document.getElementById('inp-date').value = today.toISOString().slice(0, 10);
+    window.addEventListener('DOMContentLoaded', () => {
+      load();
+      render();
 
-    load();
-    render();
+      // Set default date to today
+      const today = new Date();
+      document.getElementById('inp-date').value = today.toISOString().slice(0, 10);
+    });
   
