@@ -40,6 +40,3 @@ fleksitid/
 const NORMAL_MIN = 7 * 60 + 45; // 7 timer og 45 minutter
 ```
 
-## Lisens
-
-MIT
