@@ -1,4 +1,4 @@
-# Fleksitid – Timeregistrering
+# Fleksitid – Timeregistrering//.NET C# version coming SOON
 
 En enkel, lokal web-app for å registrere og følge opp fleksitid.
 
