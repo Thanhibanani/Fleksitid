@@ -1,6 +1,10 @@
-# Fleksitid – Timeregistrering//.NET C# version coming SOON
+# Fleksitid – Timeregistrering
 
 En enkel, lokal web-app for å registrere og følge opp fleksitid.
+
+> 🚧 **Ny versjon under utvikling:** Fleksitid bygges om til en fullverdig webapp i ASP.NET Core (.NET 10) med innlogging, stempling og arbeidstidsperioder. Se [Fleksitid-webapp](https://github.com/Thanhibanani/Fleksitid-webapp).
+
+![HTML](https://img.shields.io/badge/HTML5-E34F26?logo=html5&logoColor=white) ![CSS](https://img.shields.io/badge/CSS3-1572B6?logo=css3&logoColor=white) ![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?logo=javascript&logoColor=black)
 
 ## Bakgrunn
 
@@ -19,8 +23,8 @@ Laget for eksterne konsulenter som jobber i en virksomhet med fleksitidsordning.
 Ingen installasjon nødvendig. Bare åpne `index.html` i en nettleser.
 
 ```bash
-git clone https://github.com/ditt-brukernavn/fleksitid.git
-cd fleksitid
+git clone https://github.com/Thanhibanani/Fleksitid.git
+cd Fleksitid
 open index.html   # Mac
 start index.html  # Windows
 ```
@@ -28,13 +32,15 @@ start index.html  # Windows
 ## Struktur
 
 ```
-fleksitid/
-└── index.html   # Hele appen i én fil
+Fleksitid/
+├── index.html   # Markup og oppsett
+├── fleksi.css   # Styling
+└── fleksi.js    # Logikk og lagring i localStorage
 ```
 
 ## Tilpass
 
-Øverst i `<script>`-blokken kan du endre normaldagen:
+Øverst i `fleksi.js` kan du endre normaldagen:
 
 ```js
 const NORMAL_MIN = 7 * 60 + 45; // 7 timer og 45 minutter
